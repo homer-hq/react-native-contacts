@@ -932,13 +932,18 @@ RCT_EXPORT_METHOD(editExistingContact:(NSDictionary *)contactData resolver:(RCTP
 - (void)cancelContactForm
 {
     if (updateContactPromise != nil) {
-        UIViewController *rootViewController = (UIViewController*)[[[[UIApplication sharedApplication] delegate] window] rootViewController];
-        while (rootViewController.presentedViewController)
-            {
-                rootViewController = rootViewController.presentedViewController;
-            }
-        [rootViewController dismissViewControllerAnimated:YES completion:nil];
+        // use this when RN is starting from AppDelegate root window
+//        UIViewController *rootViewController = (UIViewController*)[[[[UIApplication sharedApplication] delegate] window] rootViewController];
+//        while (rootViewController.presentedViewController)
+//            {
+//                rootViewController = rootViewController.presentedViewController;
+//            }
+//        [rootViewController dismissViewControllerAnimated:YES completion:nil];
 
+        // use this when RN app is starting from App Scene Delegate
+        UIViewController *presentedVC = RCTPresentedViewController();
+        [presentedVC dismissViewControllerAnimated:YES completion:nil];
+        
         updateContactPromise(nil);
         updateContactPromise = nil;
     }
